@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: waa_lab3
+  datasource:
+    password: 12345
+    url: jdbc:postgresql://localhost:5432/waa_lab3
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+  sql:
+    init:
+      mode: always
+server:
+  port: 8080
