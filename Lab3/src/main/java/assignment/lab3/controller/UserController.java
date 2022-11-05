@@ -3,6 +3,7 @@ package assignment.lab3.controller;
 import assignment.lab3.domain.dto.PostDto;
 import assignment.lab3.domain.dto.UserDetailDto;
 import assignment.lab3.domain.dto.UserDto;
+import assignment.lab3.domain.dto.UserPostCommentDto;
 import assignment.lab3.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,11 @@ public class UserController {
     @GetMapping("/{id}/posts")
     public UserDetailDto getUserPostsById(@PathVariable long id) {
         return userService.findUserPostsById(id);
+    }
+
+    @GetMapping("/{id}/posts/{post_id}/comments/{comment_id}")
+    public UserPostCommentDto getUserPostCommentById(@PathVariable("id") long userId, @PathVariable("post_id") long postId, @PathVariable("comment_id") long commentId){
+        return userService.findUserPostCommentById(userId, postId, commentId);
     }
 
     @PostMapping

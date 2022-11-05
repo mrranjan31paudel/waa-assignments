@@ -1,29 +1,22 @@
 package assignment.lab3.service.impl;
 
+import assignment.lab3.domain.Comment;
 import assignment.lab3.domain.Post;
 import assignment.lab3.domain.User;
 import assignment.lab3.domain.dto.PostDto;
 import assignment.lab3.domain.dto.UserDetailDto;
 import assignment.lab3.domain.dto.UserDto;
+import assignment.lab3.domain.dto.UserPostCommentDto;
 import assignment.lab3.repo.PostRepo;
 import assignment.lab3.repo.UserRepo;
 import assignment.lab3.service.UserService;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
-import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -31,9 +24,6 @@ public class UserServiceImpl implements UserService {
     final private UserRepo userRepo;
     final private PostRepo postRepo;
     final private ModelMapper modelMapper;
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Autowired
     public UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper, PostRepo postRepo) {
@@ -110,5 +100,38 @@ public class UserServiceImpl implements UserService {
         user.removePostById(postId);
         userRepo.save(user);
         postRepo.deleteById(postId);
+    }
+
+    @Override
+    public UserPostCommentDto findUserPostCommentById(long userId, long postId, long commentId) {
+        UserPostCommentDto userPostCommentDto = new UserPostCommentDto(commentId, postId, userId, null);
+
+        User user = userRepo.findAll().stream()
+                .filter(u -> u.getId() == userId)
+                .findFirst()
+                .orElse(null);
+
+        if(user == null)
+            return null;
+
+        Post post = user.getPosts().stream()
+                .filter(p -> p.getId() == postId)
+                .findFirst()
+                .orElse(null);
+
+        if(post == null)
+            return null;
+
+        Comment comment = post.getComments().stream()
+                .filter(c -> c.getId() == commentId)
+                .findFirst()
+                .orElse(null);
+
+        if(comment == null)
+            return null;
+
+        userPostCommentDto.setName(comment.getName());
+
+        return userPostCommentDto;
     }
 }

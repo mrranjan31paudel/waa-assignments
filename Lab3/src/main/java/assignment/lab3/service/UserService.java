@@ -3,6 +3,7 @@ package assignment.lab3.service;
 import assignment.lab3.domain.dto.PostDto;
 import assignment.lab3.domain.dto.UserDetailDto;
 import assignment.lab3.domain.dto.UserDto;
+import assignment.lab3.domain.dto.UserPostCommentDto;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface UserService {
     public void savePost(long userId, PostDto postDto);
 
     public void deletePostById(long userId, long postId);
+
+    public UserPostCommentDto findUserPostCommentById(long userId, long postId, long commentId);
 }
