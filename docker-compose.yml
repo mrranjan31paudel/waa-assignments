@@ -1,7 +1,7 @@
 services:
 
   postgres:
-    container_name: lab3-data
+    container_name: waa-lab-data
     image: postgres
     environment:
       POSTGRES_USER: postgres
