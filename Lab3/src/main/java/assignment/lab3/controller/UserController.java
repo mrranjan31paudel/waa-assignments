@@ -20,11 +20,14 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(name = "posts_more_than", required = false) Long postsMoreThan) {
-        if(postsMoreThan == null)
+    public List<UserDto> getUsers(@RequestParam(name = "posts_more_than", required = false) Integer postsMoreThan, @RequestParam(name = "post_title", required = false) String postTitle) {
+        if(postsMoreThan == null && postTitle == null)
             return userService.findAll();
 
-        return  userService.findByPostMoreThan((long)postsMoreThan);
+        if(postsMoreThan == null)
+            return userService.findUsersByPostTitle(postTitle);
+
+        return userService.findByPostMoreThan(postsMoreThan);
     }
 
     @GetMapping("/{id}")

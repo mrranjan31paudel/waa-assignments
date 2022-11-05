@@ -16,10 +16,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -32,7 +36,7 @@ public class UserServiceImpl implements UserService {
     EntityManager entityManager;
 
     @Autowired
-    public UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper, PostRepo postRepo){
+    public UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper, PostRepo postRepo) {
         this.userRepo = userRepo;
         this.postRepo = postRepo;
         this.modelMapper = modelMapper;
@@ -46,8 +50,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findByPostMoreThan(long n) {
+    public List<UserDto> findByPostMoreThan(int n) {
         return userRepo.findByPostsSizeGreaterThan(n).stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> findUsersByPostTitle(String postTitle) {
+        return userRepo.findDistinctByPostsTitleContainingIgnoreCase(postTitle).stream()
                 .map(user -> modelMapper.map(user, UserDto.class))
                 .collect(Collectors.toList());
     }
@@ -72,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(long id){
+    public void deleteById(long id) {
         userRepo.deleteById(id);
     }
 
@@ -80,7 +91,7 @@ public class UserServiceImpl implements UserService {
     public void savePost(long userId, PostDto postDto) {
         User user = userRepo.findById(userId).orElse(null);
 
-        if(user == null)
+        if (user == null)
             return; // should throw a user not found exception
 
         Post post = modelMapper.map(postDto, Post.class);
@@ -93,7 +104,7 @@ public class UserServiceImpl implements UserService {
     public void deletePostById(long userId, long postId) {
         User user = userRepo.findById(userId).orElse(null);
 
-        if(user == null)
+        if (user == null)
             return; // should throw a user not found exception
 
         user.removePostById(postId);

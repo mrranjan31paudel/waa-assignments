@@ -9,7 +9,9 @@ import java.util.List;
 public interface UserService {
     public List<UserDto> findAll();
 
-    public List<UserDto> findByPostMoreThan(long n);
+    public List<UserDto> findByPostMoreThan(int n);
+
+    public List<UserDto> findUsersByPostTitle(String postTitle);
 
     public UserDto findById(long id);
 

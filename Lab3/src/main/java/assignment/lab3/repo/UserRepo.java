@@ -1,16 +1,20 @@
 package assignment.lab3.repo;
 
 import assignment.lab3.domain.User;
-import assignment.lab3.domain.dto.UserDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Long> {
+public interface UserRepo extends CrudRepository<User, Long> {
 
-    @Query("FROM User u WHERE u.id IN(SELECT p.author FROM Post p GROUP BY p.author HAVING COUNT(p.author) > :n)")
-    public List<User> findByPostsSizeGreaterThan(long n);
+    public List<User> findAll();
+
+    @Query("FROM User u WHERE u.posts.size > :n")
+    public List<User> findByPostsSizeGreaterThan(int n);
+
+    public List<User> findDistinctByPostsTitleContainingIgnoreCase(String title);
 }
