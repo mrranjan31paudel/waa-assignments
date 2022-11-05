@@ -1,5 +1,6 @@
 package assignment.lab4.controller;
 
+import assignment.lab4.aspect.annotation.ExecutionTime;
 import assignment.lab4.domain.dto.PostDto;
 import assignment.lab4.domain.dto.UserDetailDto;
 import assignment.lab4.domain.dto.UserDto;
@@ -31,6 +32,7 @@ public class UserController {
         return userService.findByPostMoreThan(postsMoreThan);
     }
 
+    @ExecutionTime
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
         return userService.findById(id);

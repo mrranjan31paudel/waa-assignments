@@ -3,22 +3,24 @@ package assignment.lab4.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Logger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String name;
+    private long transactionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Fetch(FetchMode.SELECT)
-    private Post post;
+    private LocalDateTime dateTime;
+
+    @ManyToOne
+    private User principle;
+
+    private String operation;
 }

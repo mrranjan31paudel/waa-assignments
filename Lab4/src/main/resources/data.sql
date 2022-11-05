@@ -12,13 +12,14 @@
 INSERT INTO users (id, name) VALUES (1, 'Tom');
 INSERT INTO users (id, name) VALUES (2, 'Tina');
 INSERT INTO users (id, name) VALUES (3, 'Rina');
+INSERT INTO users (id, name) VALUES (4, 'ADMIN');
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema:  Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+SELECT pg_catalog.setval('public.users_id_seq', 4, true);
 
 
 --
@@ -91,3 +92,5 @@ INSERT INTO comment (id, name, post_id) VALUES (30, 'This is first 30 comment', 
 INSERT INTO comment (id, name, post_id) VALUES (31, 'This is first 31 comment', 3);
 INSERT INTO comment (id, name, post_id) VALUES (32, 'This is first 32 comment', 1);
 INSERT INTO comment (id, name, post_id) VALUES (33, 'This is first 33 comment', 2);
+
+SELECT pg_catalog.setval('public.comment_id_seq', 33, true);

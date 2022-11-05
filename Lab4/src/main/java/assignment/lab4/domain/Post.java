@@ -3,6 +3,8 @@ package assignment.lab4.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,7 +20,8 @@ public class Post {
     private String title;
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
     private User author;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
