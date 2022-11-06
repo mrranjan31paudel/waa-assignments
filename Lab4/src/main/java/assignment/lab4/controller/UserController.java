@@ -7,7 +7,9 @@ import assignment.lab4.domain.dto.UserDto;
 import assignment.lab4.domain.dto.UserPostCommentDto;
 import assignment.lab4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,17 +37,32 @@ public class UserController {
     @ExecutionTime
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
-        return userService.findById(id);
+        UserDto userDto = userService.findById(id);
+
+        if(userDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return userDto;
     }
 
     @GetMapping("/{id}/posts")
     public UserDetailDto getUserPostsById(@PathVariable long id) {
-        return userService.findUserPostsById(id);
+        UserDetailDto userDetailDto = userService.findUserPostsById(id);
+
+        if(userDetailDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return userDetailDto;
     }
 
     @GetMapping("/{id}/posts/{post_id}/comments/{comment_id}")
     public UserPostCommentDto getUserPostCommentById(@PathVariable("id") long userId, @PathVariable("post_id") long postId, @PathVariable("comment_id") long commentId){
-        return userService.findUserPostCommentById(userId, postId, commentId);
+        UserPostCommentDto userPostCommentDto = userService.findUserPostCommentById(userId, postId, commentId);
+
+        if(userPostCommentDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return userPostCommentDto;
     }
 
     @PostMapping

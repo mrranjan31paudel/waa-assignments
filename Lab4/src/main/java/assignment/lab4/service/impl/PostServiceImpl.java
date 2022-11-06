@@ -10,8 +10,10 @@ import assignment.lab4.repo.PostRepo;
 import assignment.lab4.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,7 +66,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepo.findById(postId).orElse(null);
 
         if(post == null)
-            return; // should throw a user not found exception
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Can't add comment to a non-existing post!");
 
         Comment comment = modelMapper.map(commentDto, Comment.class);
         comment.setPost(post);
@@ -77,7 +79,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepo.findById(postId).orElse(null);
 
         if(post == null)
-            return; // should throw a user not found exception
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Can't delete comment of a non-existing post!");
 
         post.removeCommentById(commentId);
         postRepo.save(post);

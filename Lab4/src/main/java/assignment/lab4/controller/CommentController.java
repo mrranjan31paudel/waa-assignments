@@ -3,10 +3,12 @@ package assignment.lab4.controller;
 import assignment.lab4.domain.dto.CommentDto;
 import assignment.lab4.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public CommentDto getById(@PathVariable long id){
-        return commentService.findById(id);
+        CommentDto commentDto = commentService.findById(id);
+
+        if(commentDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return commentDto;
     }
 }

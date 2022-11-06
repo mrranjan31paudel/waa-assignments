@@ -12,8 +12,10 @@ import assignment.lab4.repo.UserRepo;
 import assignment.lab4.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +84,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findById(userId).orElse(null);
 
         if (user == null)
-            return; // should throw a user not found exception
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Can't add post for a non-existing user!");
 
         Post post = modelMapper.map(postDto, Post.class);
         post.setAuthor(user);
@@ -95,7 +97,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findById(userId).orElse(null);
 
         if (user == null)
-            return; // should throw a user not found exception
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Can't delete post of a non-existing user!");
 
         user.removePostById(postId);
         userRepo.save(user);

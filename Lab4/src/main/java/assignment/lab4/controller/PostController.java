@@ -5,7 +5,9 @@ import assignment.lab4.domain.dto.PostDetailDto;
 import assignment.lab4.domain.dto.PostDto;
 import assignment.lab4.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,12 +31,22 @@ public class PostController {
 
     @GetMapping("/{id}")
     public PostDto getById(@PathVariable long id) {
-        return postService.findById(id);
+        PostDto postDto = postService.findById(id);
+
+        if(postDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return postDto;
     }
 
     @GetMapping("/{id}/comments")
     public PostDetailDto getPostComments(@PathVariable("id") long postId){
-        return postService.findPostWithCommentsById(postId);
+        PostDetailDto postDetailDto = postService.findPostWithCommentsById(postId);
+
+        if(postDetailDto == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return postDetailDto;
     }
 
     @PostMapping("/{id}/comments")
