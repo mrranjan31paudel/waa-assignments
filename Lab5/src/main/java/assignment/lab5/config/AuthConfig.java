@@ -4,6 +4,7 @@ import assignment.lab5.filter.JWTFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,9 +35,10 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/authenticate/**", "/api/v1/users/**").permitAll()
+                .antMatchers("/api/v1/authenticate/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                 .antMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/api/v1/posts/**", "/api/v1/comments/**").hasAuthority("USER")
+                .antMatchers("/api/v1/users/**", "/api/v1/posts/**", "/api/v1/comments/**").hasAuthority("USER")
                 .anyRequest()
                 .authenticated()
                 .and()

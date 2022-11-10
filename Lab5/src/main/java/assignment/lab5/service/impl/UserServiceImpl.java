@@ -2,11 +2,14 @@ package assignment.lab5.service.impl;
 
 import assignment.lab5.domain.Comment;
 import assignment.lab5.domain.Post;
+import assignment.lab5.domain.Role;
 import assignment.lab5.domain.User;
 import assignment.lab5.domain.dto.*;
 import assignment.lab5.repo.PostRepo;
+import assignment.lab5.repo.RolesRepo;
 import assignment.lab5.repo.UserRepo;
 import assignment.lab5.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,19 +23,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     final private UserRepo userRepo;
     final private PostRepo postRepo;
+    final private RolesRepo rolesRepo;
     final private ModelMapper modelMapper;
     final private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper, PostRepo postRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.postRepo = postRepo;
-        this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public List<UserDto> findAll() {
@@ -75,8 +72,11 @@ public class UserServiceImpl implements UserService {
         user.setName(userCreationDto.getName());
         user.setUsername(userCreationDto.getUsername());
         user.setPassword(passwordEncoder.encode(userCreationDto.getPassword()));
-//        user.setRoles(userCreationDto.getRoles().stream().map(role));
-        userRepo.save(modelMapper.map(userCreationDto, User.class));
+
+        List<Role> roles = rolesRepo.findByNameIn(userCreationDto.getRoles());
+
+        user.setRoles(roles);
+        userRepo.save(user);
     }
 
     @Override

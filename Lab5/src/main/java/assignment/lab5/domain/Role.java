@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Role {
     @Id
@@ -17,4 +16,10 @@ public class Role {
 
     @Column(unique = true)
     String name;
+
+    public Role() {}
+
+    public Role(String name){
+        this.name = name;
+    }
 }
