@@ -15,22 +15,19 @@ public class JWTUtil {
     final private static long ACCESS_TOKEN_LIFE_IN_MS = 60 * 60 * 1000; // 1 hour
     final private static String JWT_SECRET = "uieowslkdfjksf45";
 
-    private String doGenerateToken(Map<String, Object> claims, UserDetails subject) {
-        UserAuthDetailsDto userAuthDetailsDto = (UserAuthDetailsDto) subject;
-
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userAuthDetailsDto.getUsername())
-                .setSubject(userAuthDetailsDto.getName())
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_LIFE_IN_MS))
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }
 
-    public String generateAccessToken(UserDetails userAuthDetailsDto) {
+    public String generateAccessToken(UserDetails userDetailsDto) {
         Map<String, Object> claims = new HashMap<>();
 
-        return doGenerateToken(claims, userAuthDetailsDto);
+        return doGenerateToken(claims, userDetailsDto.getUsername());
     }
 }

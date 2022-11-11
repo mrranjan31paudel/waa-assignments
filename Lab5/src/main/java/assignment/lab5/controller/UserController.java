@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/api/v1/users")
@@ -63,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUser(@RequestBody UserCreationDto userCreationDto) {
+    public void createUser(@Valid @RequestBody UserCreationDto userCreationDto) {
         userService.save(userCreationDto);
     }
 

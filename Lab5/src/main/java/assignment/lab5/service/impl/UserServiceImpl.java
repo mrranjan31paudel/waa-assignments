@@ -68,6 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserCreationDto userCreationDto) {
+        if(userRepo.findByUsername(userCreationDto.getUsername()).isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken!");
+
         User user = new User();
         user.setName(userCreationDto.getName());
         user.setUsername(userCreationDto.getUsername());
