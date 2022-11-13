@@ -31,26 +31,27 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
-        UserDetails userDetails = null;
+        String requestMethod = request.getMethod();
+        String requestPath = request.getServletPath();
+        boolean isRefreshRequest = requestMethod.equals("POST") && requestPath.equals("/api/v1/authenticate/refresh");
+        boolean isNoAuthRequest = requestMethod.equals("POST") && (requestPath.equals("/api/v1/users") ||
+                requestPath.equals("/api/v1/authenticate"));
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
-            String requestPath = request.getServletPath();
-            String requestMethod = request.getMethod();
-
-            if(!(requestMethod.equals("POST") && (requestPath.equals("/api/v1/users") ||
-                    requestPath.equals("/api/v1/authenticate")))) {
+            if(!isNoAuthRequest){
                 response.sendError(401);
                 return;
             }
         }
         else {
             String token = authorizationHeader.substring(7);
+            String username = null;
 
             try {
-                jwtUtil.validateAccessToken(token);
+                username = jwtUtil.getUsernameFromAccessToken(token);
             }
             catch (ExpiredJwtException e) {
-                if(!request.getServletPath().equals("/api/v1/authenticate/refresh")) {
+                if(!isRefreshRequest) {
                     response.sendError(401, "TOKEN_EXPIRED");
                     return;
                 }
@@ -61,15 +62,9 @@ public class JWTFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String username = jwtUtil.getUsernameFromToken(token);
-            userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if(username == null || userDetails == null) {
-                response.sendError(401); // Unknown user, so unauthorized
-                return;
-            }
-
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
 

@@ -39,20 +39,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto, HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization").substring(7);
+    public LoginResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto) {
         String refreshToken = refreshTokenRequestDto.getRefreshToken();
+        String username = null;
 
         try {
-            jwtUtil.validateRefreshToken(refreshToken);
+            username = jwtUtil.getUsernameFromRefreshToken(refreshToken);
         }
         catch (JwtException e) {
             System.out.println(e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        String username = jwtUtil.getUsernameFromToken(accessToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if(userDetails == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
         String newAccessToken = jwtUtil.generateAccessToken(userDetails);
 
         return new LoginResponseDto(newAccessToken, refreshToken);

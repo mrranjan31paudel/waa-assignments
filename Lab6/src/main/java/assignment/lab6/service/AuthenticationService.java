@@ -9,5 +9,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface AuthenticationService {
     LoginResponseDto login(LoginRequestDto loginRequestDto);
 
-    LoginResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto, HttpServletRequest request);
+    LoginResponseDto refresh(RefreshTokenRequestDto refreshTokenRequestDto);
 }

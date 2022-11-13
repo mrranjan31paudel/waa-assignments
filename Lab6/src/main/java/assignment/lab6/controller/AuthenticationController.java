@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public LoginResponseDto refreshToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto, HttpServletRequest request) {
-        return authenticationService.refresh(refreshTokenRequestDto, request);
+    public LoginResponseDto refreshToken(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        return authenticationService.refresh(refreshTokenRequestDto);
     }
 }

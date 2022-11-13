@@ -36,20 +36,20 @@ public class JWTUtil {
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
-        String username = null;
+    public String getUsernameFromToken(String token, String secret) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 
-        try {
-            username = Jwts.parser()
-                    .parseClaimsJwt(token)
-                    .getBody()
-                    .getSubject();
-        }
-        catch (Exception e) {
-            System.out.println("\n\n" + e.getMessage() + "\n\n");
-        }
+    public String getUsernameFromAccessToken(String token) {
+        return getUsernameFromToken(token, JWT_ACCESS_TOKEN_SECRET);
+    }
 
-        return username;
+    public String getUsernameFromRefreshToken(String token) {
+        return getUsernameFromToken(token, JWT_REFRESH_TOKEN_SECRET);
     }
 
     public void validateAccessToken(String token) {
