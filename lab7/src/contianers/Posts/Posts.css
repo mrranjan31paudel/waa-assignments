@@ -1,0 +1,12 @@
+.posts-container {
+  border: 1px solid;
+  padding: 8px;
+}
+
+.posts-container h3 {
+  text-align: center;
+}
+
+.posts {
+  display: flex;
+}
