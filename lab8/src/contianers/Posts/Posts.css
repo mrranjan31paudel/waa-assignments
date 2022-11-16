@@ -1,0 +1,23 @@
+.posts-container {
+  border: 2px solid;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.posts-container h3 {
+  text-align: center;
+  padding: 16px 0px;
+  margin: 0;
+  border-bottom: 2px solid;
+  margin-bottom: 8px;
+}
+
+.posts {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
