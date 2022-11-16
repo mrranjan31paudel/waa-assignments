@@ -1,0 +1,29 @@
+.post-details {
+  border: 2px solid red;
+  padding: 8px;
+}
+
+.post-details h3 {
+  text-decoration: underline;
+  text-align: center;
+}
+
+.post-content {
+  padding: 8px 4px;
+  background-color: rgb(247, 247, 247);
+}
+
+.post-actions {
+  padding: 8px;
+}
+
+.post-comments {
+  padding: 8px;
+  border: 2px solid rgb(247, 247, 247);
+}
+
+.post-comments-count {
+  font-size: 12px;
+  text-decoration: underline;
+  color: grey;
+}
