@@ -1,0 +1,13 @@
+.post {
+  background-color: rgb(0, 103, 177);
+  border: 2px solid rgb(0, 83, 143);
+  color: white;
+  padding: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.post-prop {
+  padding: 4px;
+  margin-bottom: 4px;
+}

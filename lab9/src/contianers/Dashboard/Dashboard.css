@@ -1,0 +1,28 @@
+.dashboard {
+  margin: 8px;
+  height: calc(100% - 16px);
+  overflow-y: auto;
+}
+
+@media (max-width: 820px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard .mr-8 {
+    margin-bottom: 8px;
+    margin-right: unset;
+  }
+
+  .dashboard .col10,
+  .col30,
+  .col20,
+  .col40,
+  .col50,
+  .col60,
+  .col70,
+  .col80,
+  .col90 {
+    width: 100%
+  }
+}
