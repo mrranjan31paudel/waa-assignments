@@ -1,0 +1,19 @@
+.post-details {
+  border: 2px solid red;
+  padding: 8px;
+  text-align: center;
+}
+
+.post-details h3 {
+  text-decoration: underline;
+}
+
+.post-content {
+  text-align: left;
+  padding: 8px 4px;
+  background-color: rgb(247, 247, 247);
+}
+
+.post-actions {
+  padding: 8px;
+}
